@@ -1,9 +1,11 @@
 from datetime import date
+import os
+
 class Personal_Diary():
     def __init__(self, name):
         self.name = name
         self.diary = {}
-    
+
     def make_snippet(self, string):
         first_five_words_list = []
         self.words_list = string.split()
@@ -18,8 +20,11 @@ class Personal_Diary():
         
     def add_entry(self, string):
         self.string = string
-        self.diary[date.today().strftime("%d/%m/%Y")] = string
-
+        if self.diary.get(date.today().strftime("%d/%m/%Y")) == None:
+            self.diary[date.today().strftime("%d/%m/%Y")] = string
+        else:
+            self.diary[date.today().strftime("%d/%m/%Y")] += ', ' + string
+        
     def list_entries(self):
         return list(self.diary.items())
 
