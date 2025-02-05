@@ -18,19 +18,32 @@ class Personal_Diary():
         else:
             return ' '.join(self.words_list)
         
-    def add_entry(self, string):
-        self.string = string
-        if self.diary.get(date.today().strftime("%d/%m/%Y")) == None:
-            self.diary[date.today().strftime("%d/%m/%Y")] = string
-        else:
-            self.diary[date.today().strftime("%d/%m/%Y")] += ', ' + string
-        
-    def list_entries(self):
-        return list(self.diary.items())
+    def add_entry(self, title, contents):
+        self.title = title
+        self.contents = contents
+        self.diary_entry = {title:contents}
+        if self.diary.get(date.today().strftime("%d/%m/%Y")) == None:                         # If there is not already an entry for today's date
+            self.diary[date.today().strftime("%d/%m/%Y")] = self.diary_entry                  # self.diary = {today's date:{title:contents}}
+        else:                                                                                 # Today already has an entry in self.diary
+            self.diary[date.today().strftime("%d/%m/%Y")].update(self.diary_entry)            # Append entry to existing entry for today
 
-    def count_words(self, string):
+    def list_all_entries(self):
+        return list(self.diary.items())
+    
+    def list_entry_from_given_date(self, date):
+        return [entry for entry in self.diary.items() if entry[0] == date]
+
+    def count_words_in_string(self, string):
         self.string = string
         if len(self.string.split()) == 0:
             raise Exception("empty string")
         else:
             return len(self.string.split())
+        
+    def count_words_in_entry(self, entry_title):
+        entries_dict = list(self.diary.values())[0].items()
+        for item in entries_dict:
+            if item[0] == entry_title:
+                entry_string = item[1]
+        return self.count_words_in_string(entry_string)
+        
